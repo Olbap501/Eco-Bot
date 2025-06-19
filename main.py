@@ -23,32 +23,39 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-
-
-# Comandos del bot
 hablar = False
 
 
+
+#Comando de inicio
+@bot.command()
+async def on_redy(ctx):
+    await ctx.send("Hello! I am a bot that helps you be ecologycal.To write to me first press '!'")
+
+
+
+# Comandos del bot
 @bot.command(name="eco_help")
 async def eco_help(ctx):
     await ctx.send(
-        '''activate_speech = Enables voice output for all commands
-        disable_speech = Disables the <activate_speech> command
-        eco_fact = Random fun environmental fact
-        recycle_guide (item) = How to recycle a specific item
-        carbon_footprint (activity) (amount) = Carbon footprint of an activity
-        eco_tip = Random eco-friendly tip
-        water_saving_tips = Random water-saving advice
-        eco_challenge = Eco-friendly challenge'''
+        "activate_speech = Enables voice output for all commands\n"
+        "disable_speech = Disables the <activate_speech> command\n"
+        "eco_fact = Random fun environmental fact\n"
+        "recycle_guide (item) = How to recycle a specific item\n"
+        "carbon_footprint (activity) (amount) = Carbon footprint of an activity\n"
+        "eco_tip = Random eco-friendly tip\n"
+        "water_saving_tips = Random water-saving advice\n"
+        "eco_challenge = Eco-friendly challenge\n"
     )
 
 
-@bot.command(name="ativate_speech")
+@bot.command(name="activate_speech")
 async def activate_speech(ctx):
     global hablar
     hablar = True
-    await ctx.send("The voice is **Activated**")
-    speech.read()
+    text = "The voice is **Activated**"
+    await ctx.send(text)
+    speech.read(text)
 
 
 @bot.command(name="disable_speech")
@@ -111,7 +118,7 @@ async def carbon_footprint(ctx, actividad: str, cantidad: float):
             speech.read(text)
 
 
-bot.command(name="water_saving_tip")
+@bot.command(name="water_saving_tip")
 async def water_saving_tip(ctx):
     global hablar
     text = water_tip()
@@ -147,11 +154,11 @@ async def eco_challenge(ctx):
         
         available = [i for i in range(len(challenges)) if i not in used_indices]
         if not available:
-            text = "🎉 You've completed all eco-challenges this year!"
+            text = "You've completed all eco-challenges this year!"
             await ctx.send(text)
             conn.close()
             if hablar:
-                speech.read()
+                speech.read(text)
             return
 
         challenge_index = random.choice(available)
@@ -166,7 +173,7 @@ async def eco_challenge(ctx):
     text = f"Your eco-challenge for **week {week}**:\n**{challenges[challenge_index]}**"
     await ctx.send(text)
     if hablar:
-        speech.read()
+        speech.read(text)
 
 
 
